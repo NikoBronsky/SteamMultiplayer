@@ -1,14 +1,8 @@
 ﻿cl : Command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
   voicechat.cpp
-  stdafx.cpp
-  p2pauth.cpp
-  musicplayer.cpp
-  htmlsurface.cpp
-  gameenginewin32.cpp
-  connectingmenu.cpp
-  clanchatroom.cpp
   VectorEntity.cpp
   Sun.cpp
+  stdafx.cpp
   StatsAndAchievements.cpp
   StarField.cpp
   SpaceWarServer.cpp
@@ -19,15 +13,21 @@
   RemoteStorage.cpp
   RemotePlay.cpp
   QuitMenu.cpp
-  Generating Code...
-  Compiling...
   PhotonBeam.cpp
+  p2pauth.cpp
+  musicplayer.cpp
   MainMenu.cpp
   Main.cpp
   Lobby.cpp
+  Generating Code...
+  Compiling...
   Leaderboards.cpp
   Inventory.cpp
+  htmlsurface.cpp
+  gameenginewin32.cpp
   Friends.cpp
+  connectingmenu.cpp
+  clanchatroom.cpp
   BaseMenu.cpp
   Generating Code...
 BaseMenu.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
