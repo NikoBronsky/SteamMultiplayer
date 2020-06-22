@@ -13,6 +13,7 @@
 #include "OnlineSessionSettings.h"
 #include "Interfaces/OnlineSessionInterface.h"
 
+const static FName SESSION_NAME = TEXT("My Session Game");
 
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance()
 {
@@ -40,6 +41,7 @@ void UPuzzlePlatformsGameInstance::Init()
 		if (SessionInterface.IsValid())
 		{
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnCreateSessionComplete);
+			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnDestroySessionComplete);
 		}
 	}
 	else
@@ -77,8 +79,15 @@ void UPuzzlePlatformsGameInstance::Host()
 {
 	if (SessionInterface.IsValid())
 	{
-		FOnlineSessionSettings SessionSettings;
-		SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);
+		auto ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME);
+		if (ExistingSession != nullptr)
+		{
+			SessionInterface->DestroySession(SESSION_NAME);
+		}
+		else
+		{
+			CreateSession();
+		}
 	}
 }
 void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool Success)
@@ -101,6 +110,20 @@ void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bo
 
 		World->ServerTravel("/Game/PuzzlePlatforms/Maps/Puzzle_P?listen");
 	}
+}
+
+void UPuzzlePlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool Success)
+{
+	if (Success)
+	{
+		CreateSession();
+	}
+}
+
+void UPuzzlePlatformsGameInstance::CreateSession()
+{
+	FOnlineSessionSettings SessionSettings;
+	SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 }
 
 void UPuzzlePlatformsGameInstance::Join(const FString& Address)
