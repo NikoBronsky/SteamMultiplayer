@@ -20,7 +20,7 @@ class PUZZLEPLATFORM_API UMainMenu : public UMenuWidget
 
 public:
 
-
+	UMainMenu();
 
 
 protected:
@@ -28,6 +28,8 @@ protected:
 	virtual bool Initialize() override;
 
 private:
+
+	TSubclassOf<UUserWidget> ServerRowClass;
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* HostButton;
@@ -54,7 +56,7 @@ private:
 	class UWidget* MainMenu;
 
 	UPROPERTY(meta = (BindWidget))
-	class UEditableTextBox* IPAdressField;
+	class UPanelWidget* ServerList;
 
 	UFUNCTION()
 	void HostServer();

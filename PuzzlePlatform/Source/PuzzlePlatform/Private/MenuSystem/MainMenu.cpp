@@ -5,8 +5,16 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
+#include "UObject/ConstructorHelpers.h"
+#include "MenuSystem/ServerRow.h"
 
+UMainMenu::UMainMenu()
+{
+	static ConstructorHelpers::FClassFinder<UUserWidget> ServerRowBPClass(TEXT("/Game/PuzzlePlatforms/UI/MenuSystem/WBP_ServerRow"));
+	if (!ensure(ServerRowBPClass.Class != nullptr)) return;
 
+	ServerRowClass = ServerRowBPClass.Class;
+}
 
 
 bool UMainMenu::Initialize()
@@ -81,10 +89,16 @@ void UMainMenu::Quit()
 
 void UMainMenu::JoinServer()
 {
-	if (MenuInterface != nullptr && IPAdressField != nullptr)
+// 	if (MenuInterface != nullptr && IPAdressField != nullptr)
+// 	{
+// 		FString Address = IPAdressField->GetText().ToString();
+// 		
+// 		MenuInterface->Join(Address);
+// 	}
+
+	UServerRow* Row = CreateWidget<UServerRow>(this->GetWorld(), ServerRowClass);
+	if (MenuInterface != nullptr && Row != nullptr)
 	{
-		FString Address = IPAdressField->GetText().ToString();
-		
-		MenuInterface->Join(Address);
+		ServerList->AddChild(Row);
 	}
 }
