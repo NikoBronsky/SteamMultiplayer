@@ -48,10 +48,8 @@ private:
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
-	void OnCreateSessionComplete (FName SessionName, bool Success);
-	void OnDestroySessionComplete (FName SessionName, bool Success);
-	void OnFindSessionsComplete (bool Success);
-	
+	void OnCreateSessionComplete(FName SessionName, bool Success);
+	void OnDestroySessionComplete(FName SessionName, bool Success);
 
 	void CreateSession();
 };
