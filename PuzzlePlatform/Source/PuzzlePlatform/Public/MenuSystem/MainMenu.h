@@ -22,6 +22,8 @@ public:
 
 	UMainMenu();
 
+	void SetServerList(TArray<FString> ServerNames);
+
 
 protected:
 

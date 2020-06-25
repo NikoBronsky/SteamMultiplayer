@@ -83,10 +83,6 @@ void UMainMenu::OpenJoinMenu()
 	if (JoinMenu != nullptr && MenuSwitcher != nullptr)
 	{
 		MenuSwitcher->SetActiveWidget(JoinMenu);
-		if (MenuInterface != nullptr)
-		{
-			MenuInterface->RefreshServerList();
-		}
 	}
 	
 }

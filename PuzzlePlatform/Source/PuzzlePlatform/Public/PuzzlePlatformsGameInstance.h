@@ -10,6 +10,7 @@
 
 class UUserWidget;
 class FOnlineSessionSearch;
+class UMainMenu;
 /**
  * 
  */
@@ -36,6 +37,9 @@ public:
 	void Join(const FString& Address) override;
 
 	UFUNCTION(Exec)
+	virtual void RefreshServerList() override;
+
+	UFUNCTION(Exec)
 	void LoadMainMenu() override;
 
 private:
@@ -47,6 +51,8 @@ private:
 	IOnlineSessionPtr SessionInterface;
 
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
+	UMainMenu* Menu;
 
 	void OnCreateSessionComplete (FName SessionName, bool Success);
 	void OnDestroySessionComplete (FName SessionName, bool Success);
