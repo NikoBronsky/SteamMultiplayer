@@ -24,6 +24,8 @@ public:
 
 	void SetServerList(TArray<FString> ServerNames);
 
+	void SelectIndex(uint32 Index);
+
 
 protected:
 
@@ -75,5 +77,6 @@ private:
 	UFUNCTION()
 	void Quit();
 
+	TOptional<uint32> SelectedIndex;
 
 };
