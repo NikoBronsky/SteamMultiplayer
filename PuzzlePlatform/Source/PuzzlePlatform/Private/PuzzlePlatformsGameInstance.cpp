@@ -11,7 +11,6 @@
 
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
-#include "Interfaces/OnlineSessionInterface.h"
 
 const static FName SESSION_NAME = TEXT("My Session Game");
 
@@ -43,6 +42,7 @@ void UPuzzlePlatformsGameInstance::Init()
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnCreateSessionComplete);
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnDestroySessionComplete);
 			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnFindSessionsComplete);
+			SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformsGameInstance::OnJoinSessionsComplete);
 		}
 	}
 	else
@@ -138,6 +138,30 @@ void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool Success)
 	}
 }
 
+void UPuzzlePlatformsGameInstance::OnJoinSessionsComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+	if (SessionInterface.IsValid()) return;
+
+	FString Address;
+	if (!SessionInterface->GetResolvedConnectString(SessionName, Address))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Could not get connect string"));
+		return;
+	}
+
+	UEngine* Engine = GetEngine();
+ 	if (Engine)
+ 	{
+ 		Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("Joining %s"), *Address));
+ 
+ 		APlayerController* PlayerController = GetFirstLocalPlayerController();
+ 		if (PlayerController)
+ 		{
+ 			PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+		}
+	}
+}
+
 void UPuzzlePlatformsGameInstance::CreateSession()
 {
 	FOnlineSessionSettings SessionSettings;
@@ -148,23 +172,12 @@ void UPuzzlePlatformsGameInstance::CreateSession()
 	SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 }
 
-void UPuzzlePlatformsGameInstance::Join(const FString& Address)
+void UPuzzlePlatformsGameInstance::Join(uint32 Index)
 {
-	if (Menu != nullptr)
-	{
-		Menu->SetServerList({ "Test1","Test2" });
-	}
-// 	UEngine* Engine = GetEngine();
-// 	if (Engine)
-// 	{
-// 		Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, FString::Printf(TEXT("Joining %s"), *Address));
-// 
-// 		APlayerController* PlayerController = GetFirstLocalPlayerController();
-// 		if (PlayerController)
-// 		{
-// 			PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
-// 		}
-// 	}
+	if (!SessionInterface.IsValid()) { return; }
+	if(!SessionSearch.IsValid())return;
+
+	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[Index]);
 }
 
 void UPuzzlePlatformsGameInstance::RefreshServerList()
