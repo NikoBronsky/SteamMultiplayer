@@ -9,6 +9,7 @@ void UServerRow::Setup(UMainMenu* InParent, uint32 InIndex)
 {
 	Parent = InParent;
 	Index = InIndex;
+	bIsSelected = false;
 	RowButton->OnClicked.AddDynamic(this, &UServerRow::OnClicked);
 }
 
