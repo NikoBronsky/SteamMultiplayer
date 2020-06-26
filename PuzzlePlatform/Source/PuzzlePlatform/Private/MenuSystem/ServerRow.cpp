@@ -11,6 +11,8 @@ void UServerRow::Setup(UMainMenu* InParent, uint32 InIndex)
 	Index = InIndex;
 	bIsSelected = false;
 	RowButton->OnClicked.AddDynamic(this, &UServerRow::OnClicked);
+
+
 }
 
 void UServerRow::OnClicked()
