@@ -98,6 +98,12 @@ void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bo
 		UE_LOG(LogTemp, Warning, TEXT("Could not create session"));
 		return;
 	}
+
+	if (Menu != nullptr)
+	{
+		Menu->TearDown();
+	}
+
 	UEngine* Engine = GetEngine();
 	if (Engine)
 	{
@@ -140,7 +146,12 @@ void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool Success)
 
 void UPuzzlePlatformsGameInstance::OnJoinSessionsComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
-	if (SessionInterface.IsValid()) return;
+	if (!SessionInterface.IsValid()) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("INTERFACE PROBLEM"));
+		return;
+	}
+		
 
 	FString Address;
 	if (!SessionInterface->GetResolvedConnectString(SessionName, Address))
@@ -174,8 +185,13 @@ void UPuzzlePlatformsGameInstance::CreateSession()
 
 void UPuzzlePlatformsGameInstance::Join(uint32 Index)
 {
-	if (!SessionInterface.IsValid()) { return; }
-	if(!SessionSearch.IsValid())return;
+	if (!SessionInterface.IsValid()) return;
+	if (!SessionSearch.IsValid()) return;
+
+	if (Menu != nullptr)
+	{
+		Menu->TearDown();
+	}
 
 	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[Index]);
 }
