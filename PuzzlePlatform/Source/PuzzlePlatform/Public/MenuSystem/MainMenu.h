@@ -59,6 +59,15 @@ private:
 	class UButton* ApplyIP;
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* ApplyHostName;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* CancelHosting;
+
+	UPROPERTY(meta = (BindWidget))
+	class UEditableTextBox* ServerHostName;
+
+	UPROPERTY(meta = (BindWidget))
 	class UButton* ExitButton;
 
 	UPROPERTY(meta = (BindWidget))
@@ -71,6 +80,9 @@ private:
 	class UWidget* MainMenu;
 
 	UPROPERTY(meta = (BindWidget))
+	class UWidget* HostMenu;
+
+	UPROPERTY(meta = (BindWidget))
 	class UPanelWidget* ServerList;
 
 	UFUNCTION()
@@ -81,6 +93,9 @@ private:
 
 	UFUNCTION()
 	void OpenJoinMenu();
+
+	UFUNCTION()
+	void OpenHostMenu();
 
 	UFUNCTION()
 	void BackToMainMenu();

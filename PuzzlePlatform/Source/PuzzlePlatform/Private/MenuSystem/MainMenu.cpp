@@ -8,6 +8,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "MenuSystem/ServerRow.h"
 #include "Components/TextBlock.h"
+#include "Components/EditableTextBox.h"
 
 UMainMenu::UMainMenu()
 {
@@ -68,7 +69,7 @@ bool UMainMenu::Initialize()
 	if (!Success) return false;
 	if (HostButton)
 	{
-		HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+		HostButton->OnClicked.AddDynamic(this, &UMainMenu::OpenHostMenu);
 	}
 
 	if (JoinButton)
@@ -91,6 +92,16 @@ bool UMainMenu::Initialize()
 		ExitButton->OnClicked.AddDynamic(this, &UMainMenu::Quit);
 	}
 
+	if (ApplyHostName)
+	{
+		ApplyHostName->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+	}
+
+	if (CancelHosting)
+	{
+		ApplyHostName->OnClicked.AddDynamic(this, &UMainMenu::BackToMainMenu);
+	}
+
 	return true;
 }
 
@@ -98,7 +109,8 @@ void UMainMenu::HostServer()
 {
 	if (MenuInterface != nullptr)
 	{
-		MenuInterface->Host();
+		FString ServerName = ServerHostName->GetText().ToString();
+		MenuInterface->Host(ServerName);
 	}
 }
 
@@ -113,6 +125,17 @@ void UMainMenu::OpenJoinMenu()
 		}
 	}
 	
+}
+
+void UMainMenu::OpenHostMenu()
+{
+	{
+		MenuSwitcher->SetActiveWidget(HostMenu);
+		if (MenuInterface != nullptr)
+		{
+			MenuInterface->RefreshServerList();
+		}
+	}
 }
 
 void UMainMenu::BackToMainMenu()
