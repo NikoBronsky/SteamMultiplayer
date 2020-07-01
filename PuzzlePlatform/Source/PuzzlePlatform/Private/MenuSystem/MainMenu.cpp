@@ -22,9 +22,13 @@ UMainMenu::UMainMenu()
 void UMainMenu::SetServerList(TArray<FServerData> ServerNames)
 {
 	UWorld* World = this->GetWorld();
+	if (!ensure(World != nullptr)) return;
 	if (World != nullptr)
 	{
-		ServerList->ClearChildren();
+		if (ServerList != nullptr)
+		{
+			ServerList->ClearChildren();
+		}	
 
 		uint32 i = 0;
 		for (const FServerData& ServerData : ServerNames)
@@ -99,7 +103,7 @@ bool UMainMenu::Initialize()
 
 	if (CancelHosting)
 	{
-		ApplyHostName->OnClicked.AddDynamic(this, &UMainMenu::BackToMainMenu);
+		CancelHosting->OnClicked.AddDynamic(this, &UMainMenu::BackToMainMenu);
 	}
 
 	return true;
@@ -131,24 +135,20 @@ void UMainMenu::OpenHostMenu()
 {
 	{
 		MenuSwitcher->SetActiveWidget(HostMenu);
-		if (MenuInterface != nullptr)
-		{
-			MenuInterface->RefreshServerList();
-		}
 	}
 }
 
 void UMainMenu::BackToMainMenu()
 {
-	if (MainMenu != nullptr)
-	{
-		MenuSwitcher->SetActiveWidget(MainMenu);
-	}
+	if (!ensure(MenuSwitcher != nullptr)) return;
+	if (!ensure(JoinMenu != nullptr)) return;
+	MenuSwitcher->SetActiveWidget(MainMenu);
 }
 
 void UMainMenu::Quit()
 {
 	UWorld* World = GetWorld();
+	if (!ensure(World != nullptr)) return;
 	if (World != nullptr)
 	{
 		APlayerController* PlayerController = World->GetFirstPlayerController();
